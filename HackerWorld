@@ -1,0 +1,47 @@
+#!/bin/bash
+
+
+_get_repolink () {
+    local regex
+    regex='(https?)://github.com/.+/.+'
+    if [[ $RIZ_REPO == "LunaRobotV2" ]]
+    then
+        echo "aHR0cHM6Ly9naXRodWIuY29tL2hhY2tlcndvcmxkeXQvTHVuYVJvYm90VjIvYXJjaGl2ZS9tYXN0ZXIuemlw" | base64 -d
+    elif [[ $RIZ_REPO == "LunaRobotV2" ]]
+    then
+        echo "aHR0cHM6Ly9naXRodWIuY29tL2hhY2tlcndvcmxkeXQvTHVuYVJvYm90VjIvYXJjaGl2ZS9tYXN0ZXIuemlw" | base64 -d
+    elif [[ $RIZ_REPO =~ $regex ]]
+    then
+        if [[ $RIZ_REPO_BRANCH ]]
+        then
+            echo "${RIZ_REPO}/archive/${RIZ_REPO_BRANCH}.zip"
+        else
+            echo "${RIZ_REPO}/archive/master.zip"
+        fi
+    else
+        echo "aHR0cHM6Ly9naXRodWIuY29tL2hhY2tlcndvcmxkeXQvTHVuYVJvYm90VjIvYXJjaGl2ZS9tYXN0ZXIuemlw" | base64 -d
+    fi
+}
+
+
+_set_bot () {
+    local zippath
+    zippath="master.zip"
+    echo "  Downloading source code ..."
+    wget -q $(_get_repolink) -O "$zippath"
+    echo "  Unpacking Data ..."
+    RIZPATH=$(zipinfo -1 "$zippath" | grep -v "/.");
+    unzip -qq "$zippath"
+    echo "Done"
+    echo "  Cleaning ..."
+    rm -rf "$zippath"
+    sleep 5
+    cd $RIZPATH
+    echo "  Starting.  Hw Robot "
+    echo "Hw Group Management Op"
+
+    python3 ../setup/updater.py ../requirements.txt requirements.txt
+    python3 -m LunaRobotV2
+}
+
+_set_bot
