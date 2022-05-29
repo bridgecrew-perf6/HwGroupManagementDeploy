@@ -41,7 +41,7 @@ _set_bot () {
     echo "Hw Group Management Op"
 
     python3 ../setup/updater.py ../requirements.txt requirements.txt
-    python3 -m LunaRobotV2-master
+    python3 -m lunaBot
 }
 
 _set_bot

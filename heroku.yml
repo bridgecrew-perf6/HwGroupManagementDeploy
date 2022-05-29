@@ -2,4 +2,4 @@ build:
   docker:
       worker: Dockerfile
 run:
-   worker: python3 -m LunaRobotV2
+   worker: python3 -m lunaBot
