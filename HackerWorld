@@ -1,47 +1,45 @@
 #!/bin/bash
 
 
-_get_repolink () {
+_repolink () {
     local regex
     regex='(https?)://github.com/.+/.+'
-    if [[ $RIZ_REPO == "LunaRobotV2" ]]
+    if [[ $SPAM_REPO == "Tianabot" ]]
     then
-        echo "aHR0cHM6Ly9naXRodWIuY29tL2hhY2tlcndvcmxkeXQvTHVuYVJvYm90VjIvYXJjaGl2ZS9tYXN0ZXIuemlw" | base64 -d
-    elif [[ $RIZ_REPO == "LunaRobotV2" ]]
+        echo "aHR0cHM6Ly9jb2RlbG9hZC5naXRodWIuY29tL2hhY2tlcndvcmxkeXQvVGlhbmFib3QvemlwL21haW4=" | base64 -d
+    elif [[ $SPAM_REPO == "Tianabot" ]]
     then
-        echo "aHR0cHM6Ly9naXRodWIuY29tL2hhY2tlcndvcmxkeXQvTHVuYVJvYm90VjIvYXJjaGl2ZS9tYXN0ZXIuemlw" | base64 -d
-    elif [[ $RIZ_REPO =~ $regex ]]
+        echo "aHR0cHM6Ly9jb2RlbG9hZC5naXRodWIuY29tL2hhY2tlcndvcmxkeXQvVGlhbmFib3QvemlwL21haW4=" | base64 -d
+    elif [[ $SPAM_REPO =~ $regex ]]
     then
-        if [[ $RIZ_REPO_BRANCH ]]
+        if [[ $SPAM_REPO_BRANCH ]]
         then
-            echo "${RIZ_REPO}/archive/${RIZ_REPO_BRANCH}.zip"
+            echo "${SPAM_REPO}/archive/${SPAM_REPO_BRANCH}.zip"
         else
-            echo "${RIZ_REPO}/archive/master.zip"
+            echo "${SPAM_REPO}/archive/main.zip"
         fi
     else
-        echo "aHR0cHM6Ly9naXRodWIuY29tL2hhY2tlcndvcmxkeXQvTHVuYVJvYm90VjIvYXJjaGl2ZS9tYXN0ZXIuemlw" | base64 -d
+        echo "aHR0cHM6Ly9jb2RlbG9hZC5naXRodWIuY29tL2hhY2tlcndvcmxkeXQvVGlhbmFib3QvemlwL21haW4=" | base64 -d
     fi
 }
 
 
-_set_bot () {
+start_bot () {
     local zippath
-    zippath="master.zip"
+    zippath="Tianabot.zip"
     echo "  Downloading source code ..."
-    wget -q $(_get_repolink) -O "$zippath"
+    wget -q $(_repolink) -O "$zippath"
     echo "  Unpacking Data ..."
-    RIZPATH=$(zipinfo -1 "$zippath" | grep -v "/.");
+    HELLPATH=$(zipinfo -1 "$zippath" | grep -v "/.");
     unzip -qq "$zippath"
-    echo "Done"
-    echo "  Cleaning ..."
+    echo "  Processing Codes..."
     rm -rf "$zippath"
     sleep 5
-    cd $RIZPATH
-    echo "  Starting.  Hw Robot "
-    echo "Hw Group Management Op"
+    cd $HELLPATH
+    echo "  • Starting Hw Group Management •  "
 
     python3 ../setup/updater.py ../requirements.txt requirements.txt
-    python3 -m lunaBot
+    python3 -m Tianabot
 }
 
-_set_bot
+start_bot
